@@ -19,9 +19,3 @@ npm start
 
 Enter a directory path containing `.pdf` or `.docx` files, choose an analysis mode (1–4), and get the result from Vertex AI.
 
-## Requirements
-
-- Node.js
-- [Poppler](https://poppler.freedesktop.org/) (for PDF→images)
-- LibreOffice (for DOCX→PDF)
-- Google Cloud project with Vertex AI enabled
