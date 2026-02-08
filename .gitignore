@@ -1,4 +1,4 @@
 node_modules/
 .env
 api_keys.json
-.traineddata
+*.traineddata
