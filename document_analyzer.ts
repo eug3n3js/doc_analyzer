@@ -47,7 +47,7 @@ export class DocumentAnalyzer {
         } catch (error) {
             throw error;
         } finally {
-            await cleanupDirs([this.temp_images_dir]);
+            await cleanupDirs([this.temp_images_dir, this.output_dir]);
         }
     }
 
