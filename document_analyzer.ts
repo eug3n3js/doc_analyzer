@@ -14,7 +14,7 @@ export class DocumentAnalyzer {
     }
 
     public async read_document(filePath: string): Promise<Document> {
-        console.log(`\n[Analyzer] Processing file: ${filePath}`);
+        console.log(`[Analyzer] Processing file: ${filePath}`);
         const ext = path.extname(filePath).toLowerCase();
         const baseName = path.basename(filePath);
 

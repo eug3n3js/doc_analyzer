@@ -59,7 +59,7 @@ export async function convertPdfToJpg(
         return imagePaths;
         
     } catch (error) {
-        throw error;
+        throw new Error("Failed to convert PDF to images: " + String(error));
     } finally {
         try {
             if (fs.existsSync(tempPdfPath)) {
@@ -85,7 +85,6 @@ export async function extractTextFromImage(
             const pageNum = i + 1;
             
             if (!fs.existsSync(imagePath)) {
-                console.warn(`[OCR] Warning: image not found: ${imagePath}`);
                 continue;
             }
             
@@ -97,7 +96,7 @@ export async function extractTextFromImage(
         console.log(`[OCR] OCR finished. Total text length: ${allText.length}`);
         return allText.trim();
     } catch (error) {
-        throw error;
+        throw new Error("Failed to extract text from images: " + String(error));
     } finally {
         await worker.terminate();   
     }
@@ -128,7 +127,7 @@ export async function convertDocxToPdf(
 
         return path.resolve(pdfOutputPath);
     } catch (error) {
-        throw error;
+        throw new Error("Failed to convert DOCX to PDF: " + String(error));
     }
 }
 
@@ -138,7 +137,6 @@ export async function cleanupDirs(dirs: string[]): Promise<void> {
         if (!fs.existsSync(absDir)) {
             continue;
         }
-
         try {
             const entries = await fsPromises.readdir(absDir);
             for (const name of entries) {
@@ -157,7 +155,7 @@ export async function cleanupDirs(dirs: string[]): Promise<void> {
             await fsPromises.rmdir(absDir);
             console.log(`[CLEANUP] Deleted temporary directory: ${absDir}`);
         } catch (error) {
-            console.warn(`[CLEANUP] Failed to delete directory ${absDir}: ${String(error)}`);
+            console.log(`[CLEANUP] Failed to delete directory ${absDir}: ${String(error)}`);
         }
     }
 }

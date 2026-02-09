@@ -37,9 +37,13 @@ export class VertexAIService {
         const request = {
             contents: [{ role: "user", parts: documentParts }],
         };
-        const result = await model.generateContent(request);
-        const response = await result.response;
-        return response.candidates[0].content.parts[0].text;
+        try{
+            const result = await model.generateContent(request);
+            const response = await result.response;
+            return response.candidates[0].content.parts[0].text;
+        } catch (error) {
+            throw new Error("Failed to generate content: " + String(error));
+        }
     }
 
     public async first_check(user_documents: Document[]): Promise<string> {

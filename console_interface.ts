@@ -70,7 +70,6 @@ export class ConsoleInterface {
                 "Enter directory path with .pdf/.docx files: "
             );
             const mode = await this.askMode(rl);
-
             console.log("Scanning and processing documents in directory...");
             const docs = await this.collectDocumentsFromDir(dirPath.trim());
             console.log(`Documents found: ${docs.length}`);
@@ -80,7 +79,7 @@ export class ConsoleInterface {
             console.log("=== Analysis result ===");
             console.log(result);
         } catch (error) {
-            console.error(String(error));
+            throw error;
         } finally {
             rl.close();
         }
