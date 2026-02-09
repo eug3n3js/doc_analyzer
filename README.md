@@ -10,6 +10,7 @@ CLI tool that analyzes PDF and DOCX documents using Google Vertex AI (Gemini). S
    - `LOCATION` — e.g. `us-central1`
    - `KEY_FILE_PATH` — path to your service account JSON (e.g. `api_keys.json`)
 3. Place your Google Cloud service account key file (e.g. `api_keys.json`) in the project root.
+4. Install the **LibreOffice** desktop application on your system (required for DOCX → PDF conversion).
 
 ## Run
 
