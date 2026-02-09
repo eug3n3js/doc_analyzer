@@ -4,7 +4,6 @@ import * as path from 'path';
 import { createWorker } from 'tesseract.js';
 import pdf from 'pdf-poppler';
 import libre from 'libreoffice-convert';
-import { promisify } from 'util';
 
 export async function convertPdfToJpg(
     pdfPath: string, 
@@ -83,11 +82,9 @@ export async function extractTextFromImage(
         for (let i = 0; i < imagePaths.length; i++) {
             const imagePath = imagePaths[i];
             const pageNum = i + 1;
-            
             if (!fs.existsSync(imagePath)) {
                 continue;
             }
-            
             console.log(`[OCR] Processing page ${pageNum}: ${imagePath}`);
             const { data: { text } } = await worker.recognize(imagePath);
             console.log(`[OCR] Done: page ${pageNum}, text length: ${text.length}`);
@@ -106,7 +103,6 @@ export async function convertDocxToPdf(
     docxPath: string,
     outputDir: string
 ): Promise<string> {
-    const convertAsync = promisify(libre.convert);
     if (!fs.existsSync(docxPath)) {
         throw new Error(`File not found: ${docxPath}`);
     }
@@ -118,9 +114,16 @@ export async function convertDocxToPdf(
     try {
         const docxBuffer = await fsPromises.readFile(docxPath);
 
-        const pdfBuffer = await convertAsync(docxBuffer, '.pdf', undefined);
+        const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
+            libre.convert(docxBuffer, ".pdf", undefined, (err, done) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(done);
+            });
+        });
 
-        const fileName = path.basename(docxPath, '.docx') + '.pdf';
+        const fileName = path.basename(docxPath, ".docx") + ".pdf";
         const pdfOutputPath = path.join(outputDir, fileName);
 
         await fsPromises.writeFile(pdfOutputPath, pdfBuffer);
